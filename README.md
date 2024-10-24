@@ -88,6 +88,10 @@ conda install pytorch torchvision cpuonly -c pytorch
 Installiere die benötigten Bibliotheken von OpenMMLab sowie zusätzliche Pakete:
 
 ```bash
+pip install -U openmim
+```
+
+```bash
 pip install mmengine
 pip install mmcv==2.1.0
 pip install "mmsegmentation>=1.0.0"
@@ -100,7 +104,11 @@ pip install ftfy
 
 Unabhängig davon, ob du die automatische oder die manuelle Methode gewählt hast, kannst du die Installation überprüfen, indem du ein Beispielskript ausführst.
 
-Im Ordner `model` findest du die Konfigurations- und Checkpoint-Dateien für das PSPNet-Modell ([PSPNet](https://arxiv.org/abs/1612.01105)).
+Lade hierzu im ersten Schritt die Konfigurations- und Checkpointdatei des PSPNet-Modell ([PSPNet](https://arxiv.org/abs/1612.01105)) herunter und speicher sie in `/model`.
+
+```bash
+mim download mmsegmentation --config pspnet_r50-d8_4xb2-40k_cityscapes-512x1024 --dest ./model
+```
 
 Führe das Skript `installation_verification.py` aus, um das Bild `demo/inputs/demo.png` zu segmentieren. Das Ergebnis wird im Ordner `demo/results` gespeichert:
 
