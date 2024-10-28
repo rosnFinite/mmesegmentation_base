@@ -25,20 +25,23 @@ Es gibt zwei Methoden, um die Conda-Umgebung für MMSegmentation aufzusetzen:
 ## Automatisches Aufsetzen der Conda-Umgebung [GPU]
 
 Die Datei `requirements.txt` enthält bereits alle notwendigen Pakete und Versionen für die GPU-Variante von MMSegmentation. Falls du keine GPU zur Verfügung hast, folge der [manuellen Installationsanleitung](#manuelles-aufsetzen-der-conda-umgebung).
-</br>
-</br>
+
+**Hinweis:**
+*Bei der automatischen Installation kann es zu einem im Abschnitt [Fehlerbehebung](#fehlerbehebung) beschriebenen Problem mit dem Paket `mmcv` kommen.*
+
+
 Um die Umgebung automatisch einzurichten, führe folgenden Befehl aus:
 
 ```bash
-conda create --name mmsegmentation --file requirements.txt
+conda env create -f environment.yml
 ```
 
-Dieser Befehl erstellt eine Conda-Umgebung mit dem Namen `mmsegmentation` und installiert alle erforderlichen Pakete aus der `requirements.txt`-Datei.
+Dieser Befehl erstellt eine Conda-Umgebung mit dem Namen `mmseg` und installiert alle erforderlichen Pakete aus der `environment.yml`-Datei.
 
 Nach erfolgreicher Installation aktiviere die Umgebung:
 
 ```bash
-conda activate mmsegmentation
+conda activate mmseg
 ```
 
 Springe anschließend direkt zum Abschnitt [Verifizierung der Installation](#verifizierung-der-installation), um zu testen, ob alles korrekt eingerichtet wurde.
@@ -55,17 +58,17 @@ Falls du die Umgebung manuell einrichten möchtest, folge den nachstehenden Schr
 Erstelle zuerst eine neue Conda-Umgebung mit Python 3.8:
 
 ```bash
-conda create --name mmsegmentation python=3.8 -y
+conda create --name mmseg python=3.8 -y
 ```
 
-Dieser Befehl erstellt eine Umgebung namens `mmsegmentation` und installiert Python 3.8. Das `-y` bestätigt automatisch alle Rückfragen während der Installation.
+Dieser Befehl erstellt eine Umgebung namens `mmseg` und installiert Python 3.8. Das `-y` bestätigt automatisch alle Rückfragen während der Installation.
 
 ### 2. Aktivieren der Conda-Umgebung
 
 Aktiviere die Umgebung, damit alle weiteren Installationen innerhalb dieser Umgebung stattfinden:
 
 ```bash
-conda activate mmsegmentation
+conda activate mmseg
 ```
 
 ### 3. Installation von PyTorch
@@ -137,3 +140,24 @@ python installation_verification.py
 ```
 
 Wenn alles korrekt eingerichtet ist, solltest du das segmentierte Bild im Ordner `demo/results` finden.
+
+---
+
+## Fehlerbehebung
+
+### Failed to build `mmcv`
+Dieser Fehler wird in den meisten Fällen bei der automatischen Installation der `mmseg`-Umgebung auftreten, da über die `environment.yml` für pip keine manuelles Verzeichnis zum Installieren der korrekten `mmcv`-Version angegeben werden kann. 
+Stattdessen wird in diesem Fall `mmcv` als Quellpaket (.tar.gz) heruntergeladen, welche daraufhin manuell in das eigentliche `mmcv`-Paket gebaut werden müssten.
+
+```bash
+> Failed to build mmcv
+> ERROR: Could not build wheels for mmcv, which is required to install
+> pyproject.toml-based projects
+```
+Um das zu geben wir bei der Installation von `mmcv` ein Verzeichnis an aus dem die passende prebuild Version geladen werden soll: 
+1. Vergewissere dich, dass du CUDA 12.1 und pytorch 2.1 installiert hat.
+2. Überprüfe, ob `mmcv` in der Umgebung abgelegt wurde. Führe dazu `conda env list` aus und schau ob `mmcv` in der Liste der installierten Pakete auftaucht und deinstalliere es in dem Fall mit `pip uninstall mmcv`
+3. Installiere `mmcv` von einer manuell hinterlegten Adresse `pip install mmcv==2.1.0 -f https://download.openmmlab.com/mmcv/dist/cu121/torch2.1/index.html`. Dies garantiert, dass die korrekte prebuild Version installiert wird.
+
+### ERROR: pip's dependency resolver does not currently take into account all the packages that are installed
+In den meisten Fällen kann dieser Fehler ignoriert werden. Er tritt auf, weil sowohl Pip als auch Conda als Paketmanager verwendet werden. Jeder dieser Paketmanager kann jedoch nur die Versionen der Pakete überwachen, die er selbst installiert hat. Daher kommt es gelegentlich zu Fehlermeldungen, wenn der jeweilige Paketmanager auf Pakete stößt, die vom anderen installiert wurden.
