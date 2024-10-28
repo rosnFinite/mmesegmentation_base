@@ -154,10 +154,10 @@ Stattdessen wird in diesem Fall `mmcv` als Quellpaket (.tar.gz) heruntergeladen,
 > ERROR: Could not build wheels for mmcv, which is required to install
 > pyproject.toml-based projects
 ```
-Um das zu geben wir bei der Installation von `mmcv` ein Verzeichnis an aus dem die passende prebuild Version geladen werden soll: 
+Um das zu umgehebn, geben wir bei der Installation von `mmcv` ein Verzeichnis an aus dem die passende prebuild Version geladen werden soll: 
 1. Vergewissere dich, dass du CUDA 12.1 und pytorch 2.1 installiert hat.
 2. Überprüfe, ob `mmcv` in der Umgebung abgelegt wurde. Führe dazu `conda env list` aus und schau ob `mmcv` in der Liste der installierten Pakete auftaucht und deinstalliere es in dem Fall mit `pip uninstall mmcv`
 3. Installiere `mmcv` von einer manuell hinterlegten Adresse `pip install mmcv==2.1.0 -f https://download.openmmlab.com/mmcv/dist/cu121/torch2.1/index.html`. Dies garantiert, dass die korrekte prebuild Version installiert wird.
 
 ### ERROR: pip's dependency resolver does not currently take into account all the packages that are installed
-In den meisten Fällen kann dieser Fehler ignoriert werden. Er tritt auf, weil sowohl Pip als auch Conda als Paketmanager verwendet werden. Jeder dieser Paketmanager kann jedoch nur die Versionen der Pakete überwachen, die er selbst installiert hat. Daher kommt es gelegentlich zu Fehlermeldungen, wenn der jeweilige Paketmanager auf Pakete stößt, die vom anderen installiert wurden.
+In den meisten Fällen kann dieser Fehler ignoriert werden. Er tritt auf, weil sowohl Pip als auch Conda als Paketmanager verwendet werden. Jeder dieser Paketmanager kann jedoch nur die Versionen der Pakete überwachen, die er selbst installiert hat. Daher kommt es gelegentlich zu Fehlermeldungen, wenn der jeweilige Paketmanager auf Pakete stößt, die vom anderen installiert wurden oder diese nicht finden kann, obwohl sie vorhanden sind.
