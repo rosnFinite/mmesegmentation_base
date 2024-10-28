@@ -6,7 +6,7 @@ In dieser Anleitung wird erklärt, wie du MMSegmentation installieren kannst, un
 
 ## Voraussetzungen
 
-Diese Anleitung setzt voraus, dass du **Anaconda** oder eine seiner Varianten bereits auf deinem System installiert hast. Falls nicht, kannst du eine der folgenden Optionen installieren:
+Die Anleitung setzt voraus, dass du **Anaconda** oder eine seiner Varianten bereits auf deinem System installiert hast. Falls nicht, kannst du eine der folgenden Optionen installieren:
 
 - **[Miniconda](https://docs.anaconda.com/miniconda/)**: Eine minimalistische Version von Anaconda, die nur die wichtigsten Befehle über die Kommandozeile (CLI) enthält.
 - **[Miniforge](https://github.com/conda-forge/miniforge?tab=readme-ov-file)**: Eine vorkonfigurierte Variante, die den `conda-forge` Kanal und `mamba` (einen schnelleren Paketmanager) enthält.
@@ -47,7 +47,8 @@ Springe anschließend direkt zum Abschnitt [Verifizierung der Installation](#ver
 
 ## Manuelles Aufsetzen der Conda-Umgebung
 
-Falls du die Umgebung manuell einrichten möchtest, folge den nachstehenden Schritten.
+Falls du die Umgebung manuell einrichten möchtest, folge den nachstehenden Schritten. Diese sind dabei angelehnt an die [Get Started Dokumentation von MMsegmentation](https://mmsegmentation.readthedocs.io/en/main/get_started.html)
+, wobei problematische Versionsunterschiede einzelner Pakete behoben sind.
 
 ### 1. Erstellen einer Conda-Umgebung
 
@@ -72,31 +73,50 @@ conda activate mmsegmentation
 Je nach System kannst du entweder die GPU- oder die CPU-Variante von PyTorch installieren:
 
 **Für Systeme mit GPU:**
+- Pytorch 2.1.2
+- Cuda 12.1
 
 ```bash
-conda install pytorch torchvision pytorch-cuda=12.4 -c pytorch -c nvidia
+conda install pytorch==2.1.2 torchvision==0.16.2 pytorch-cuda=12.1 fsspec -c pytorch -c nvidia -c conda-forge -y
 ```
 
 **Für Systeme ohne GPU (nur CPU):**
 
 ```bash
-conda install pytorch torchvision cpuonly -c pytorch
+conda install pytorch torchvision cpuonly -c pytorch -y
 ```
 
-### 4. Installation der OpenMMLab-Pakete
+### 4. Installation notwendiger OpenMMLab-Pakete
 
-Installiere die benötigten Bibliotheken von OpenMMLab sowie zusätzliche Pakete:
+Installation von MIM, des eigenen Paketmanagers von OpenMMLab:
 
 ```bash
 pip install -U openmim
 ```
 
 ```bash
-pip install mmengine
-pip install mmcv==2.1.0
-pip install "mmsegmentation>=1.0.0"
-pip install ftfy
+mim install mmengine
 ```
+
+**Für Systeme mit GPU:**
+
+Neuere Versionen von mmcv (bspw. 2.2.0) werden zum aktuellen Zeitpunkt ohne zusätzlich manuelle Anpassung von MMEngine nicht unterstützt. Siehe zugehöriges [GitHub-Issue](https://github.com/open-mmlab/mmcv/issues/3096).
+```bash
+pip install mmcv==2.1.0 -f https://download.openmmlab.com/mmcv/dist/cu121/torch2.1/index.html
+```
+**Für Systeme ohne GPU (nur CPU):**
+```bash
+pip install mmcv==2.1.0
+```
+
+### 5. Installation von MMSegmentation
+Neben MMSegmentation muss hier das Modul `ftfy` installiert werden, da es nicht in den Abhängigkeiten von MMSegmentation enthalten und somit nicht automatisch installiert wird.
+```bash
+pip install "mmsegmentation>=1.0.0" ftfy
+```
+
+
+
 
 ---
 
