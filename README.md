@@ -115,7 +115,7 @@ Falls dieser Fehler auftritt, wurde `mmcv` als Quellpaket (.tar.gz) heruntergela
 > ERROR: Could not build wheels for mmcv, which is required to install
 > pyproject.toml-based projects
 ```
-Um diesen Fehler zu beheben, geben wir bei der Installation von `mmcv` ein Webverzeichnis an aus dem die passende prebuild Version geladen werden soll: 
+Um diesen Fehler zu beheben, geben wir bei der Installation von `mmcv` ein Webverzeichnis an, aus dem die passende prebuild Version geladen werden soll: 
 1. Vergewissere dich, dass du CUDA 12.1 und pytorch 2.1 installiert hat.
 2. Überprüfe, ob `mmcv` bereits in der Umgebung hinterlegt ist. Führe dazu `conda env list` aus und schau ob `mmcv` in der Liste der installierten Pakete auftaucht und deinstalliere es in dem Fall mit `pip uninstall mmcv`
 3. Installiere `mmcv` von einem manuell hinterlegten Webverzeichnis `pip install mmcv==2.1.0 -f https://download.openmmlab.com/mmcv/dist/cu121/torch2.1/index.html`. Dies garantiert, dass die korrekte prebuild Version (.whl) installiert wird.
